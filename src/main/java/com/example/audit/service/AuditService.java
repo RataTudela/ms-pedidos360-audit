@@ -16,12 +16,13 @@ public class AuditService {
     }
 
     public List<AuditEvent> getAuditLogs(String orderId, String actor) {
-        if (orderId != null && !orderId.isBlank()) {
-            return repository.findByOrderIdOrderByTimestampDesc(orderId);
+        if (orderId != null && actor != null) {
+            return repository.findByOrderIdAndActor(orderId, actor);
+        } else if (orderId != null) {
+            return repository.findByOrderId(orderId);
+        } else if (actor != null) {
+            return repository.findByActor(actor);
         }
-        if (actor != null && !actor.isBlank()) {
-            return repository.findByActorOrderByTimestampDesc(actor);
-        }
-        return repository.findAllByOrderByTimestampDesc();
+        return repository.findAll();
     }
 }

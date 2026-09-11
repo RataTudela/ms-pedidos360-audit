@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface AuditEventRepository extends JpaRepository<AuditEvent, Long> {
-    List<AuditEvent> findByOrderIdOrderByTimestampDesc(String orderId);
-    List<AuditEvent> findByActorOrderByTimestampDesc(String actor);
-    List<AuditEvent> findAllByOrderByTimestampDesc();
+    List<AuditEvent> findByOrderId(String orderId);
+    List<AuditEvent> findByActor(String actor);
+    List<AuditEvent> findByOrderIdAndActor(String orderId, String actor);
 }

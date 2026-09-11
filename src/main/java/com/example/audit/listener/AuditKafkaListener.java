@@ -24,15 +24,18 @@ public class AuditKafkaListener {
     @KafkaListener(topics = "orders.events.v1", groupId = "audit-service-group")
     public void consumeOrderEvent(Map<String, Object> orderEvent) {
         try {
-            String orderId = (String) orderEvent.get("id");
-            String status = (String) orderEvent.get("status");
-            String customer = (String) orderEvent.get("customer");
+            // Extracción segura para evitar ClassCastException
+            Object rawId = orderEvent.get("id");
+            String orderId = (rawId != null) ? String.valueOf(rawId) : "N/A";
+
+            Object rawCustomer = orderEvent.get("customer");
+            String customer = (rawCustomer != null) ? String.valueOf(rawCustomer) : "Sistema";
 
             AuditEvent audit = new AuditEvent();
             audit.setEventId(UUID.randomUUID().toString());
             audit.setEventType("ORDER_STATUS_CHANGED");
-            audit.setOrderId(orderId != null ? orderId : "N/A");
-            audit.setActor(customer != null ? customer : "Sistema");
+            audit.setOrderId(orderId);
+            audit.setActor(customer);
             audit.setTimestamp(LocalDateTime.now());
             audit.setDetails(objectMapper.writeValueAsString(orderEvent));
 
