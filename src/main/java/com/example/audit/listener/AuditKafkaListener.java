@@ -24,7 +24,6 @@ public class AuditKafkaListener {
     @KafkaListener(topics = "orders.events.v1", groupId = "audit-service-group")
     public void consumeOrderEvent(Map<String, Object> orderEvent) {
         try {
-            // Extracción segura para evitar ClassCastException
             Object rawId = orderEvent.get("id");
             String orderId = (rawId != null) ? String.valueOf(rawId) : "N/A";
 
